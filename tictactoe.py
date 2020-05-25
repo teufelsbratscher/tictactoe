@@ -1,5 +1,6 @@
 import sys
 import copy
+import math
 
 
 X = "X"
@@ -22,7 +23,6 @@ def player(board):
     if num_x > num_o:
         return O
     return X
-
 
 def actions(board):
     possible_actions = set()
@@ -87,7 +87,7 @@ def winner(board):
 
 
 def terminal(board):
-    if winner(board) == X or winner(board) == O:
+    if winner(board):
         return True
 
     if winner(board) != X and winner(board) != O:
@@ -129,18 +129,27 @@ def minimax(board):
             v = min(v, max_value(result(board, action)))
         return v
 
-        if terminal(board):
-            return None
+    if terminal(board):
+        return None
+
+    if player(board) == X:
+        x_val = -sys.maxsize
         for action in actions(board):
-            if player(board) == X:
-                x_val = -1
-                x_val = max(min_value(action), x_val)
-                return x_val
+            current_x_val = min_value(result(board, action))
+            if current_x_val == 1:
+                return action
+            if current_x_val > x_val:
+                x_val = current_x_val
+                best_action = action
+        return best_action
 
-            if player(board) == O:
-                o_val = 1
-                o_val = min(max_value(action), o_val)
-                return o_val
-
-
-
+    if player(board) == O:
+        o_val = sys.maxsize
+        for action in actions(board):
+            current_o_val = max_value(result(board, action))
+            if current_o_val == -1:
+                return action
+            if current_o_val > o_val:
+                o_val = current_o_val
+                best_action = action
+                return best_action
