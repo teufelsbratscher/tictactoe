@@ -142,14 +142,17 @@ def minimax(board):
                 x_val = current_x_val
                 best_action = action
         return best_action
-
+    
+    # It looks like you've only changed the X player algorythm and forgot to improve O accordingly.
     if player(board) == O:
         o_val = sys.maxsize
         for action in actions(board):
             current_o_val = max_value(result(board, action))
             if current_o_val == -1:
                 return action
+            # you forgot here to change > to <. Now Both X and O want X to win:)
             if current_o_val > o_val:
                 o_val = current_o_val
                 best_action = action
+                # change the indentation of the return statement like you did for the X player
                 return best_action
